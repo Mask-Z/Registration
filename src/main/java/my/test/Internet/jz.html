@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>讲座列表</title>
+    <!--Jquery-1.10.2.min-->
+    <script src="/Public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/Public/js/showtip.js"></script>
+    <link rel="stylesheet" href="/Public/style/home/weui.css"/>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/Public/style/home/bootstrap/bootstrap.min.css">
+    <style>
+        .alert {
+            padding: 8px 35px 8px 14px;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            background-color: #fcf8e3;
+            border: 1px solid #fbeed5;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+        }
+        .alert-error {
+            background-color: #f2dede;
+            border-color: #eed3d7;
+            color: #b94a48;
+        }
+    </style>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/Public/js/bootstrap/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var $userid = "";
+            //var $userid = "zhuweibing";
+            var $dldd = $('#XS');
+            var $lectureID = "";
+            var $lectureTitle = ""
+
+            if($userid == ''){
+                $dldd.hide();
+            }else{
+                $('#please').hide();
+            }
+
+            $dldd.find('.btn-success').click(function() {
+                $lectureID=$(this).attr("data-value");
+                $lectureTitle=$(this).attr("data-title");
+                if ($lectureID > 0) {
+                    var $txt = "您确定要报名参加《"+$lectureTitle+"》讲座吗？";
+                    $("#dialog1 .weui_dialog_bd").text($txt);
+                    var href = "javascript:doenroll("+$lectureID+");";
+                    $("#confirm").attr("href",href);
+                    $("#dialog1").show();
+                }
+            });
+        });
+
+        /*确认报名*/
+        function doenroll(lectureID){
+            hidedialog();
+            var userid = "";
+            $.ajax({
+                type: "post",
+                url: "/index.php/Lecture/enrolldo",
+                data:{
+                    "userid":userid,
+                    "lid":lectureID
+                },
+                dataType: "json",
+                success: function (data) {
+                    showTip(data.message);
+                    /* if(data.state == 'true'){
+                     location.href = data.nextUrl;
+                     } */
+                }
+            });
+        }
+
+        function hidedialog(){
+            $(".weui_dialog_confirm").hide();
+        }
+    </script>
+</head>
+<body>
+<!--要求身份验证开始-->
+<div class="container-fluid"  style="margin-top:20px;" id='please'>
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 id="myModalLabel" style="text-align:center;">
+                你尚未通过身份验证
+            </h3>
+            <div class="modal-body">
+                <div style="text-align:center;margin:0 auto;">
+                    <img alt="常大i教学" src="/Public/image/home/qrcode.jpg" style="width:80%;height:90%;">
+                    <p>
+                        请先关注【常大i教学】公众号！
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--要求身份验证结束-->
+<!--列表开始-->
+<div class="container-fluid" style="margin-top:20px;" id="XS">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="list-group">
+                <a href="#" class="list-group-item active">新加坡高等教育的模式与思考</a>
+                <div class="list-group-item">
+                    讲座人：刘晓骞						</div>
+                <div class="list-group-item">
+                    讲座时间：2016-11-25 15:10 ~ 17:00						</div>
+                <div class="list-group-item">
+                    讲座地点：武进校区  W7阶						</div>
+                <div class="list-group-item">
+                    <h5 class="list-group-item-heading">
+                        内容简介：
+                    </h5>
+                    <p class="list-group-item-text" style="text-indent:28px;">
+                        新加坡教育体系遵循英国教育系统，结合自身特点，在培养人才方面自成体系。本讲座从新加坡地理，文化出发，结合自身感受，介绍新加坡高等教育的模式，以及思考对于我国高等教育的借鉴。							</p>
+                </div>
+                <div class="list-group-item">
+                    <div style="width:35%;float:right;text-align:right;margin-top: -7px;">
+                        <button class="btn " style="width:100px;" data-value="39" data-title="新加坡高等教育的模式与思考" type="button" contenteditable="true">预告</button>
+                    </div>
+                    &nbsp;&nbsp;剩余名额<span class="badge" style=" float:left;background-color:#468847;color:#fff;">300个</span>
+                </div>
+            </div><div class="list-group">
+            <a href="#" class="list-group-item active">当代中国经济改革：过去、现状与未来</a>
+            <div class="list-group-item">
+                讲座人：姚惠泽						</div>
+            <div class="list-group-item">
+                讲座时间：2016-11-23 15:40 ~ 17:00						</div>
+            <div class="list-group-item">
+                讲座地点：白云校区  南6阶						</div>
+            <div class="list-group-item">
+                <h5 class="list-group-item-heading">
+                    内容简介：
+                </h5>
+                <p class="list-group-item-text" style="text-indent:28px;">
+                    对中国经济所经历的计划经济体制进行回顾，围绕其成就与得失，总结中国在转向市场经济道路上所经历的过程、付出的代价和取得的成就，分析当前中国经济所呈现的特色和阶段性特征，对中国经济的未来走向进行展望。							</p>
+            </div>
+            <div class="list-group-item">
+                <div style="width:35%;float:right;text-align:right;margin-top: -7px;">
+                    <button class="btn btn-success" style="width:100px;" data-value="38" data-title="当代中国经济改革：过去、现状与未来" type="button" contenteditable="true">立即报名</button>
+                </div>
+                &nbsp;&nbsp;剩余名额<span class="badge" style=" float:left;background-color:#b94a48;color:#fff;">0个</span>
+            </div>
+        </div>				</div>
+    </div>
+</div>
+<!--列表结束-->
+<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">确认提示</strong></div>
+        <div class="weui_dialog_bd">您确定要申请该任务吗</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:hidedialog();" class="weui_btn_dialog default">取消</a>
+            <a id="confirm" href="javascript:doenroll();" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
