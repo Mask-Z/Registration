@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="testCard:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/testCard_jar</output-path>
+    <root id="archive" name="testCard.jar">
+      <element id="module-output" name="testCard" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/alibaba/fastjson/1.2.20/fastjson-1.2.20.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

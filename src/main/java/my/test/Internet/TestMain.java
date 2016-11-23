@@ -6,51 +6,103 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestMain {
-	private static String urlString = "http://jskc.cczu.edu.cn/index.php/Lecture/enrolldo";//报名码(need:userid--学号,lid--讲座号)
-	private static String urlQainDao = "http://jskc.cczu.edu.cn/index.php/Lecture/signdo";//签到码(need:userid--学号,vfcode--签到码)
+    private static String urlString = "http://jskc.cczu.edu.cn/index.php/Lecture/enrolldo";//报名码(need:userid--学号,lid--讲座号)
+    private static String urlQainDao = "http://jskc.cczu.edu.cn/index.php/Lecture/signdo";//签到码(need:userid--学号,vfcode--签到码)
 
-	public static void main(String[] args) throws Exception {
-		baoming();
-		qiandao();
+    private String userid;//学号
+    private String lid;//讲座号
+    private String vfcode;//签到码
 
-	}
+    public TestMain() {
+    }
 
-	public static void baoming() throws Exception {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("userid", "13477129");
-		String result;
-		JSONObject json;
-		for (int i = 39; i <= 39; i++) {
-			map.put("lid", "" + i);
-			result = Http_Post.sendPostMessage(urlString, map, "");
-			json = JSONObject.parseObject(result);
-			if (Boolean.valueOf((String) json.get("state"))) {
-				System.out.println(json.get("message"));
-			}
-			System.out.println("\t" + json.get("state") + "\t" + json.get("message"));
+    public TestMain(String userid) {
+        this.userid = userid;
+    }
 
+    public String getUserid() {
+        return userid;
+    }
 
-		}
-	}
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
-	public static void qiandao() throws Exception {//签到
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("userid", "13477129");
-		String result;
-		JSONObject json;
-		for (int i = 0; i < 10000; i++) {
-			map.put("vfcode", "16" + String.format("%04d", i));
-			result = Http_Post.sendPostMessage(urlQainDao, map, "");
-			json = JSONObject.parseObject(result);
-			if (Boolean.valueOf((String) json.get("state"))) {
-				System.out.println(json.get("message"));
-				break;
-			}
-			System.out.println("\t" + json.get("state") + "\t" + json.get("message"));
-		}
-	}
+    public String getLid() {
+        return lid;
+    }
+
+    public void setLid(String lid) {
+        this.lid = lid;
+    }
+
+    public String getVfcode() {
+        return vfcode;
+    }
+
+    public void setVfcode(String vfcode) {
+        this.vfcode = vfcode;
+    }
 
 
+    /**
+     * 报名
+     *
+     * @throws Exception
+     */
+    public void baoming() throws Exception {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userid", getUserid());
+        String result;
+        JSONObject json;
+        map.put("lid", getLid());
+        int count = 0;
 
+        while (true) {
+            System.out.println("学号:" + getUserid() + "   次数:" + count++ + ".........");
+            result = Http_Post.sendPostMessage(urlString, map, "");
+            json = JSONObject.parseObject(result);
+            if (Boolean.valueOf((String) json.get("state"))) {
+                System.out.println(json.get("message"));
+                break;
+            }
+            System.out.println("\t" + json.get("state") + "\t" + json.get("message"));
+            if (count % 100 == 0)
+                Thread.sleep(1000);
+        }
+    }
 
+    /**
+     * 签到
+     *
+     * @throws Exception
+     */
+    public void qiandao() throws Exception {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userid", getUserid());
+        String result;
+        JSONObject json;
+        if (null == getVfcode() || getVfcode().equals("")) {//如果不知道签到码,则循环获取
+            for (int i = 0; i < 10000; i++) {
+                System.out.println("当前学号: "+getUserid());
+                map.put("vfcode", "16" + String.format("%04d", i));
+                result = Http_Post.sendPostMessage(urlQainDao, map, "");
+                json = JSONObject.parseObject(result);
+                if (Boolean.valueOf((String) json.get("state"))) {
+                    System.out.println(json.get("message")+" 签到码为: "+getVfcode());
+                    break;
+                }
+                System.out.println("签到码"+map.get("vfcode")+" \t" + json.get("state") + "\t" + json.get("message"));
+                if (i % 100 == 0)
+                    Thread.sleep(1000);
+            }
+        } else {
+            map.put("vfcode", getVfcode());
+            result = Http_Post.sendPostMessage(urlQainDao, map, "");
+            json = JSONObject.parseObject(result);
+            System.out.println("当前学号: "+getUserid());
+            System.out.println("\t" + "已获取签到码: " + json.get("state") + "\t" + json.get("message"));
+        }
+
+    }
 }
