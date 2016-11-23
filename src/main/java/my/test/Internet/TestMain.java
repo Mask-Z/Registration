@@ -101,7 +101,7 @@ public class TestMain {
             result = Http_Post.sendPostMessage(urlQainDao, map, "");
             json = JSONObject.parseObject(result);
             System.out.println("当前学号: "+getUserid());
-            System.out.println("\t" + "已获取签到码: " + json.get("state") + "\t" + json.get("message"));
+            System.out.println("\t" + "已获取签到码:"+getVfcode()+"  " + json.get("state") + "\t" + json.get("message"));
         }
 
     }
