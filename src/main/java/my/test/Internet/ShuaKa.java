@@ -31,6 +31,8 @@ public class ShuaKa {
         ResourceBundle bundle = ResourceBundle.getBundle("info");
         String lid = bundle.getString("lid");
         String vfcode = bundle.getString("vfcode");
+        String tempStr= bundle.getString("temp");
+        int temp=(tempStr.equals("")?0:Integer.parseInt(tempStr));
         String[] userids = bundle.getString("userid").split(",");
         int count = userids.length;
         final List<TestMain> mainList = new ArrayList<TestMain>();
@@ -38,6 +40,7 @@ public class ShuaKa {
             TestMain testMain = new TestMain(userids[i].trim());
             testMain.setLid(lid);
             testMain.setVfcode(vfcode);
+            testMain.setTemp(temp);
             mainList.add(testMain);
         }
         return mainList;

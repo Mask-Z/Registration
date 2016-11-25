@@ -2,8 +2,10 @@ package my.test.Internet;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class TestMain {
     private static String urlString = "http://jskc.cczu.edu.cn/index.php/Lecture/enrolldo";//报名码(need:userid--学号,lid--讲座号)
@@ -12,6 +14,7 @@ public class TestMain {
     private String userid;//学号
     private String lid;//讲座号
     private String vfcode;//签到码
+    private int temp=0;
 
     public TestMain() {
     }
@@ -72,9 +75,18 @@ public class TestMain {
         }
     }
 
+    public int getTemp() {
+        return temp;
+    }
+
+    public void setTemp(int temp) {
+        this.temp = temp;
+    }
+
     /**
      * 签到
      *
+
      * @throws Exception
      */
     public void qiandao() throws Exception {
@@ -83,17 +95,18 @@ public class TestMain {
         String result;
         JSONObject json;
         if (null == getVfcode() || getVfcode().equals("")) {//如果不知道签到码,则循环获取
-            for (int i = 0; i < 10000; i++) {
+            for (; temp < 10000; temp++) {
                 System.out.println("当前学号: "+getUserid());
-                map.put("vfcode", "16" + String.format("%04d", i));
+                map.put("vfcode", "16" + String.format("%04d", temp));
                 result = Http_Post.sendPostMessage(urlQainDao, map, "");
                 json = JSONObject.parseObject(result);
                 if (Boolean.valueOf((String) json.get("state"))) {
-                    System.out.println(json.get("message")+" 签到码为: "+getVfcode());
+
+                    System.out.println(json.get("message")+" 签到码为: "+map.get("vfcode"));
                     break;
                 }
                 System.out.println("签到码"+map.get("vfcode")+" \t" + json.get("state") + "\t" + json.get("message"));
-                if (i % 100 == 0)
+                if (temp % 100 == 0)
                     Thread.sleep(1000);
             }
         } else {
@@ -105,4 +118,5 @@ public class TestMain {
         }
 
     }
+
 }
